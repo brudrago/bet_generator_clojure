@@ -13,8 +13,8 @@
                 {:status 200
                  :body   "{\"status\":\"ok\"}"})
 
-           (GET "/bets/:game" [game]
-                (handler/handle game))
+           (GET "/bets/:id/:game" [id game]
+                (handler/handle id game))
 
            (route/not-found
              {:status 404
