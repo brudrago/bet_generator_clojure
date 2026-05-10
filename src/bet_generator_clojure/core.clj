@@ -1,4 +1,5 @@
-(ns bet-generator-clojure.core)
+(ns bet-generator-clojure.core
+  (:require []))
 
 (defn foo
   "I don't do a whole lot."
