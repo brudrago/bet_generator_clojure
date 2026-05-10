@@ -27,4 +27,4 @@
                   :game   game
                   :status 500
                   :error  (.getMessage exception)})
-      (json-response 500 {:error "Internal server error"})))))
+      (json-response 500 {:error "Internal server error"}))))
