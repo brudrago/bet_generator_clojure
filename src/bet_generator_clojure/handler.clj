@@ -11,27 +11,14 @@
    :body (json/generate-string body)})
 
 (defn handle [game]
-  (let [start (System/currentTimeMillis)]
-    (try
-      (let [result   (generator/draw (keyword game))
-            duration (- (System/currentTimeMillis) start)]
-        (log/info {:event    "bet_generated"
-                   :game     game
-                   :status   200
-                   :duration duration})
-        (json-response 200 result))
-      (catch clojure.lang.ExceptionInfo exception
-        (log/warn {:event    "invalid_bet_type"
-                   :game     game
-                   :status   400
-                   :duration (- (System/currentTimeMillis) start)
-                   :error    (.getMessage exception)})
-        (json-response 400 {:error   (.getMessage exception)
-                            :details (ex-data exception)}))
-      (catch Exception exception
-        (log/error {:event    "unexpected_error"
-                    :game     game
-                    :status   500
-                    :duration (- (System/currentTimeMillis) start)
-                    :error    (.getMessage exception)})
-        (json-response 500 {:error "Internal server error"})))))
+  (try
+    (let [result (generator/draw (keyword game))]
+      (log/info {:event "bet_generated" :game game :status 200})
+      (json-response 200 result))
+    (catch clojure.lang.ExceptionInfo exception
+      (log/warn {:event  "invalid_bet_type"
+                 :game   game
+                 :status 400
+                 :error  (.getMessage exception)})
+      (json-response 400 {:error   (.getMessage exception)
+                          :details (ex-data exception)}))))

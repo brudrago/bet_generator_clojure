@@ -3,32 +3,30 @@
     [compojure.core :refer [GET defroutes]]
     [compojure.route :as route]
     [ring.adapter.jetty :refer [run-jetty]]
-    [bet-generator-clojure.handler :as handler])
+    [bet-generator-clojure.handler :as handler]
+    [bet-generator-clojure.middleware :as middleware])
   (:gen-class))
 
 (defroutes app-routes
 
-           ;; Healthcheck
            (GET "/health" []
-                {:status  200
-                 :headers {"Content-Type" "application/json"}
-                 :body    "{\"status\":\"ok\"}"})
+                {:status 200
+                 :body   "{\"status\":\"ok\"}"})
 
            (GET "/bets/:game" [game]
                 (handler/handle game))
 
-           ;; 404
            (route/not-found
-             {:status  404
-              :headers {"Content-Type" "application/json"}
-              :body    "{\"error\":\"Route not found\"}"}))
+             {:status 404
+              :body   "{\"error\":\"Route not found\"}"}))
+
+(def app
+  (-> app-routes
+      middleware/wrap-exception
+      middleware/wrap-json-content-type
+      middleware/wrap-request-logging))
 
 (defn -main
   [& _args]
-
   (println "Server running on port 3000")
-
-  (run-jetty
-    app-routes
-    {:port 3000
-     :join? false}))
+  (run-jetty app {:port 3000 :join? false}))
