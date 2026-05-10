@@ -8,4 +8,5 @@
                  [ring/ring-jetty-adapter "1.12.2"]
                  [compojure "1.7.1"]
                  [cheshire "5.13.0"]]
+  :main bet-generator-clojure.core
   :repl-options {:init-ns bet-generator-clojure.core})

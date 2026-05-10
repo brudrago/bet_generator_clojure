@@ -2,7 +2,7 @@
   (:require [bet-generator-clojure.bet-options :as opt]))
 
 (defn valid-bet-type? [bet-type]
-  contains? opt/bet-options bet-type)
+  (contains? opt/bet-options bet-type))
 
 (defn draw [bet-type]
   (if-not (valid-bet-type? bet-type)
